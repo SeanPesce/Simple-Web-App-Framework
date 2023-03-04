@@ -8,7 +8,7 @@ Python 3 framework I developed for quickly prototyping web apps (e.g., server em
 
 ## Usage  
 
-The vast majority of common use-cases are demonstrated by the example implementations in `endpoints.py` (generally speaking, most new code should be added to this file).  
+The vast majority of common use-cases are demonstrated by the example implementations in [endpoints.py](https://github.com/SeanPesce/Simple-Web-App-Framework/blob/main/endpoints.py) (generally speaking, most new code should be added to this file).  
 
 ## Disclaimer  
 
