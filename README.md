@@ -4,7 +4,7 @@
 
 ## Overview  
 
-Python 3 framework I developed for quickly prototyping web apps (e.g., server emulators). This code is not considered safe for use on public hosts.  
+Python 3 framework I developed for quickly prototyping web apps and APIs (e.g., server emulators). This code is not considered safe for use on public hosts.  
 
 ## Usage  
 
