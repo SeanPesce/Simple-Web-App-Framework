@@ -16,7 +16,7 @@ import web_util
 web_util.Default.banner = 'Python Web Server by Sean Pesce'
 
 
-# Define the default set of headers provided with all requests (can be overridden within
+# Define the default set of headers provided with all responses (can be overridden within
 # WebPathHandler implementations)
 web_util.Default.set_headers({
     'X-Example-Default-Header': 'SeanP',
