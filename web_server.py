@@ -104,14 +104,14 @@ class WebAppHttpHandler(http.server.BaseHTTPRequestHandler, web_util.WebPathMap)
             self.pending_resp.headers['Content-Length'] = str(len(self.pending_resp.body))
 
         for hdr in self.headers:  # Request headers
-            print(f'    {hdr}:{self.headers[hdr]}')
+            print(f'    {hdr}: {self.headers[hdr]}')
         print()
         if len(self.req_payload) > 0:
             print(f'    {self.req_payload}\n')
 
         print(f'{self.protocol_version} {self.pending_resp.status_code} {http.client.responses[self.pending_resp.status_code]}')
         for hdr in self.pending_resp.headers:  # Response headers
-            print(f'    {hdr}:{self.pending_resp.headers[hdr]}')
+            print(f'    {hdr}: {self.pending_resp.headers[hdr]}')
             self.send_header(hdr, self.pending_resp.headers[hdr])
         if len(self.pending_resp.body) > 0:
             print(f'\n    {self.pending_resp.body[:1000]}\n\n')
