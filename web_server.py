@@ -259,7 +259,7 @@ def serve(host, port, cert_fpath, privkey_fpath):
     httpd.using_tls = False
     if cert_fpath and privkey_fpath:
         httpd.using_tls = True
-        context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
         context.load_cert_chain(certfile=cert_fpath, keyfile=privkey_fpath, password='')
         httpd.socket = context.wrap_socket(httpd.socket, server_side=True)
     print(f'Listening for HTTP{"S" if httpd.using_tls else ""} connections on {host}:{port}\n')
