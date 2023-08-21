@@ -148,6 +148,15 @@ class WebPathMap:
         'POST': POST_PATHS,
         'PUT': PUT_PATHS,
     }
+    
+    GET_REGEX_PATHS = {}
+    POST_REGEX_PATHS = {}
+    PUT_REGEX_PATHS = {}
+    REGEX_PATHS = {
+        'GET': GET_REGEX_PATHS,
+        'POST': POST_REGEX_PATHS,
+        'PUT': PUT_REGEX_PATHS,
+    }
 
 
 class WebPathHandler(abc.ABC):
@@ -162,9 +171,14 @@ class WebPathHandler(abc.ABC):
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
+        if not hasattr(cls, 'PATHS'):
+            cls.PATHS = list()
+        if not hasattr(cls, 'REGEX_PATHS'):
+            cls.REGEX_PATHS = list()
+        
         if len(cls.METHODS) == 0:
             raise KeyError('At least one method must be defined')
-        if len(cls.PATHS) == 0:
+        if len(cls.PATHS) + len(cls.REGEX_PATHS) == 0:
             raise KeyError('At least one path must be defined')
 
         if not hasattr(cls, 'DISABLE_HEAD_REQUESTS'):
@@ -199,6 +213,11 @@ class WebPathHandler(abc.ABC):
                 if path in WebPathMap.PATHS[method]:
                     print(f'[Warning] Overwriting {method} {path}')
                 WebPathMap.PATHS[method][path] = cls
+
+            for path in cls.REGEX_PATHS:
+                if path in WebPathMap.REGEX_PATHS[method]:
+                    print(f'[Warning] Overwriting {method} {path} (RegEx)')
+                WebPathMap.REGEX_PATHS[method][path] = cls
         return
 
 

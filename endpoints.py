@@ -41,14 +41,32 @@ class ExampleEndpoint01(web_util.WebPathHandler):
         return
 
 
-
 class ExampleEndpoint02(web_util.WebPathHandler):
     """
-    Basic responder that handles PUT and POST requests to two paths ("/example2", "/example02") and
+    Basic responder that handles GET requests to paths that match a Regular Expression for
+    "/exampleRegex" followed by any number of digits, and returns the digits in the
+    response body. Note the use of REGEX_PATHS rather than PATHS.
+    """
+    METHODS = ['GET']
+    REGEX_PATHS = ['/exampleRegex([0-9]+)$']
+
+    def _handle(self):
+        # Set the "Content-Type" response header
+        self.response.headers['Content-Type'] = 'text/plain'
+
+        # Set the response body data using the RegEx capture group
+        self.response.body = self.req_handler.path_regex_capture.group(1)
+        return
+
+
+
+class ExampleEndpoint03(web_util.WebPathHandler):
+    """
+    Basic responder that handles PUT and POST requests to two paths ("/example3", "/example03") and
     echoes the request body in the response body.
     """
     METHODS = ['POST', 'PUT']
-    PATHS = ['/example2', '/example02']
+    PATHS = ['/example3', '/example03']
 
     def _handle(self):
         # Set the "Content-Type" response header
@@ -60,13 +78,13 @@ class ExampleEndpoint02(web_util.WebPathHandler):
 
 
 
-class ExampleEndpoint03(web_util.WebPathHandler):
+class ExampleEndpoint04(web_util.WebPathHandler):
     """
     This responder demonstrates how to retrieve various information about the HTTP request and
     client/server states.
     """
     METHODS = ['GET']
-    PATHS = ['/example03']
+    PATHS = ['/example04']
 
     def _handle(self):
         # Set the "Content-Type" response header
@@ -106,12 +124,12 @@ class ExampleEndpoint03(web_util.WebPathHandler):
 
 
 
-class ExampleEndpoint04(web_util.WebPathHandler):
+class ExampleEndpoint05(web_util.WebPathHandler):
     """
     This handler demonstrates how to use a local file as a template for the response body.
     """
     METHODS = ['GET']
-    PATHS = ['/example04']
+    PATHS = ['/example05']
     TEMPLATE = 'assets/SeanP.png'
 
     def _handle(self):
@@ -124,7 +142,7 @@ class ExampleEndpoint04(web_util.WebPathHandler):
 
 
 
-class ExampleEndpoint05(web_util.WebPathHandler):
+class ExampleEndpoint06(web_util.WebPathHandler):
     """
     This handler demonstrates how to use a local file as a template for the response body, with
     automatic file-parsing for specific file types (determined using file extension).
@@ -141,7 +159,7 @@ class ExampleEndpoint05(web_util.WebPathHandler):
         *.yml  -> Returns dict
     """
     METHODS = ['GET']
-    PATHS = ['/example05']
+    PATHS = ['/example06']
     TEMPLATE = 'assets/template.json'
     PARSE_TEMPLATE = True
     TEMPLATE_ENCODING = 'utf8'
@@ -159,13 +177,13 @@ class ExampleEndpoint05(web_util.WebPathHandler):
 
 
 
-class ExampleEndpoint06(web_util.WebPathHandler):
+class ExampleEndpoint07(web_util.WebPathHandler):
     """
-    Basic responder that handles GET requests to the path "/example06" and returns "Hello world!"
+    Basic responder that handles GET requests to the path "/example07" and returns "Hello world!"
     in the response body, but HEAD and OPTIONS requests are disabled.
     """
     METHODS = ['GET']
-    PATHS = ['/example06']
+    PATHS = ['/example07']
     DISABLE_HEAD_REQUESTS = True
     DISABLE_OPTIONS_REQUESTS = True
 

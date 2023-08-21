@@ -11,6 +11,7 @@
 
 import gzip
 import http.server, http.client
+import re
 import socket
 import ssl
 import sys
@@ -52,6 +53,8 @@ class WebAppHttpHandler(http.server.BaseHTTPRequestHandler, web_util.WebPathMap)
                 except ValueError:
                     pass
         self.primary_path = parsed_path.path
+        self.path_regex = None
+        self.path_regex_capture = None
         self.req_payload = b''
         if self.command in ('POST', 'PUT') or has_content_len_hdr:
             content_len = 0
@@ -128,6 +131,7 @@ class WebAppHttpHandler(http.server.BaseHTTPRequestHandler, web_util.WebPathMap)
     def _build_and_send_response(self):
         self._init_response()
 
+        # Check for an exact match URL path
         for m in self.__class__.PATHS:
             if (m == self.command or self.command in ('HEAD', 'OPTIONS')) and self.primary_path in self.__class__.PATHS[m]:
                 path_handler = self.__class__.PATHS[m][self.primary_path]
@@ -152,6 +156,40 @@ class WebAppHttpHandler(http.server.BaseHTTPRequestHandler, web_util.WebPathMap)
 
             elif self.primary_path in self.__class__.PATHS[m]:
                 self.pending_resp = web_util.RESP_BAD_METHOD()
+
+        # Check for a Regular Expression match URL path
+        if self.pending_resp is None:
+            for m in self.__class__.REGEX_PATHS:
+                path_handler = None
+                self.path_regex = None
+                self.path_regex_capture = None
+                for p in self.__class__.REGEX_PATHS[m]:
+                    if re.match(p, self.primary_path) is not None:
+                        path_handler = self.__class__.REGEX_PATHS[m][p]
+                        self.path_regex = p
+                        self.path_regex_capture = re.search(self.path_regex, self.primary_path)
+                        break
+                
+                if (m == self.command or self.command in ('HEAD', 'OPTIONS')) and path_handler is not None:
+                    if (self.command == 'HEAD' and path_handler.DISABLE_HEAD_REQUESTS) or (self.command == 'OPTIONS' and path_handler.DISABLE_OPTIONS_REQUESTS):
+                        self.pending_resp = web_util.RESP_BAD_METHOD()
+                        break
+                    elif self.command == 'OPTIONS':
+                        self.pending_resp = web_util.RESP_NO_CONTENT()
+                        self.pending_resp.headers['Allow'] = ''
+                        for method in self.__class__.REGEX_PATHS:
+                            for p in self.__class__.REGEX_PATHS[method]:
+                                if re.match(p, self.primary_path) is not None:
+                                    self.pending_resp.headers['Allow'] += f'{method}, '
+                        self.pending_resp.headers['Allow'] = self.pending_resp.headers['Allow'][:-2]
+                        break
+
+                    self.pending_resp = path_handler(self, web_util.RESP_OK()).handle()
+                    assert self.pending_resp is not None, 'Path handler returned None response'
+                    break
+
+                elif path_handler is not None:
+                    self.pending_resp = web_util.RESP_BAD_METHOD()
 
         if self.pending_resp is None:
             self.pending_resp = web_util.RESP_NOT_FOUND()
