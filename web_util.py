@@ -134,7 +134,16 @@ def read_file(fpath, parse=False, encoding='utf8'):
 
 
 class WebPathMap:
+    CONNECT_PATHS = {
+        '/': None
+    }
+    DELETE_PATHS = {
+        '/': None
+    }
     GET_PATHS = {
+        '/': None
+    }
+    PATCH_PATHS = {
         '/': None
     }
     POST_PATHS = {
@@ -144,16 +153,25 @@ class WebPathMap:
         '/': None
     }
     PATHS = {
+        'CONNECT': CONNECT_PATHS,
+        'DELETE': DELETE_PATHS,
         'GET': GET_PATHS,
+        'PATCH': PATCH_PATHS,
         'POST': POST_PATHS,
         'PUT': PUT_PATHS,
     }
     
+    CONNECT_REGEX_PATHS = {}
+    DELETE_REGEX_PATHS = {}
     GET_REGEX_PATHS = {}
+    PATCH_REGEX_PATHS = {}
     POST_REGEX_PATHS = {}
     PUT_REGEX_PATHS = {}
     REGEX_PATHS = {
+        'CONNECT': CONNECT_REGEX_PATHS,
+        'DELETE': DELETE_REGEX_PATHS,
         'GET': GET_REGEX_PATHS,
+        'PATCH': PATCH_REGEX_PATHS,
         'POST': POST_REGEX_PATHS,
         'PUT': PUT_REGEX_PATHS,
     }

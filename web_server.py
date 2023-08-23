@@ -56,7 +56,7 @@ class WebAppHttpHandler(http.server.BaseHTTPRequestHandler, web_util.WebPathMap)
         self.path_regex = None
         self.path_regex_capture = None
         self.req_payload = b''
-        if self.command in ('POST', 'PUT') or has_content_len_hdr:
+        if self.command in ('PATCH', 'POST', 'PUT') or has_content_len_hdr:
             content_len = 0
             compression = None
             chunked = False
@@ -197,6 +197,14 @@ class WebAppHttpHandler(http.server.BaseHTTPRequestHandler, web_util.WebPathMap)
         self._send_pending_response()
 
 
+    def do_CONNECT(self):
+        self._build_and_send_response()
+
+
+    def do_DELETE(self):
+        self._build_and_send_response()
+
+
     def do_GET(self):
         self._build_and_send_response()
 
@@ -209,11 +217,19 @@ class WebAppHttpHandler(http.server.BaseHTTPRequestHandler, web_util.WebPathMap)
         self._build_and_send_response()
 
 
+    def do_PATCH(self):
+        self._build_and_send_response()
+
+
     def do_POST(self):
         self._build_and_send_response()
 
 
     def do_PUT(self):
+        self._build_and_send_response()
+
+
+    def do_TRACE(self):
         self._build_and_send_response()
 
 
