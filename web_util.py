@@ -120,8 +120,8 @@ def read_file(fpath, parse=False, encoding='utf8'):
     elif file_extension == '.gz':
         data = gzip.decompress(data)
     elif file_extension == '.ini':
-        iniparser = configparser.ConfigParser()
-        data = iniparser.read(fpath)
+        data = configparser.ConfigParser()
+        data.read(fpath)
     elif file_extension == '.json':
         data = json.loads(data)
     elif file_extension == '.xml':
