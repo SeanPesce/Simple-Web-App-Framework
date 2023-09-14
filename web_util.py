@@ -121,7 +121,7 @@ def read_file(fpath, parse=False, encoding='utf8'):
         data = gzip.decompress(data)
     elif file_extension == '.ini':
         iniparser = configparser.ConfigParser()
-        data = iniparser.read_string(data.decode(encoding))
+        data = iniparser.read(fpath)
     elif file_extension == '.json':
         data = json.loads(data)
     elif file_extension == '.xml':
