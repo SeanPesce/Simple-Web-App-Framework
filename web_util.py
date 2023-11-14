@@ -10,8 +10,17 @@ import gzip
 import json
 import lzma
 import os
+import sys
 import urllib3
-import yaml
+
+# yaml is not a default package; only support if it's installed
+yaml = None
+try:
+    import yaml
+except ModuleNotFoundError as err:
+    # Do nothing; support will be automatic if the package is installed
+    print('[WARNING] No YAML package found; YAML response template parsing is disabled', file=sys.stderr)
+    pass
 
 from xml.etree import ElementTree
 
@@ -128,7 +137,7 @@ def read_file(fpath, parse=False, encoding='utf8'):
         data = ElementTree.fromstring(data)
     elif file_extension in ('.xz', '.lzma'):
         data = lzma.decompress(data)
-    elif file_extension in ('.yaml', '.yml'):
+    elif yaml is not None and file_extension in ('.yaml', '.yml'):
         data = yaml.safe_load(data)
     return data
 
