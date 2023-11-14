@@ -40,15 +40,15 @@ class Default:
     
     @classmethod
     def set_headers(cls, headers):
-        assert type(headers) == dict, f'Expected dictionary but received {type(headers)=}'
+        assert type(headers) == dict, f'Expected dictionary but received type(headers)={type(headers)}'
         headers = dict(headers)
         for header in headers.keys():
-            assert type(header) == str, f'Expected string but received {type(header)=}'
+            assert type(header) == str, f'Expected string but received type(header)={type(header)}'
             bad_chars = ' :\r\n\t\b\0'
             for bad_char in bad_chars:
                 assert bad_char not in header, f'Header key contained invalid character: \'{bad_char}\''
             header_value = headers[header]
-            assert type(header_value) == str, f'Expected string but received {type(header_value)=}'
+            assert type(header_value) == str, f'Expected string but received type(header_value)={type(header_value)}'
             headers[header] = header_value.replace('\n', ' ').replace('\r', ' ')
         
         cls._headers = headers
@@ -180,7 +180,7 @@ class WebPathMap:
 class WebPathHandler(abc.ABC):
     def __init__(self, req_handler, response_init=None):
         self.req_handler = req_handler
-        assert self.req_handler is not None, f'{self.__class__.__name__} : {req_handler=}'
+        assert self.req_handler is not None, f'{self.__class__.__name__} : req_handler={req_handler}'
         self.response = response_init.copy()
         if self.response is None:
             self.response = RESP_OK()
@@ -217,11 +217,11 @@ class WebPathHandler(abc.ABC):
         if not hasattr(cls, 'TEMPLATE_ENCODING'):
             cls.TEMPLATE_ENCODING = cls.RESPONSE_ENCODING
         
-        assert type(cls.DISABLE_HEAD_REQUESTS) == bool, f'Expected boolean value but encountered {type(cls.DISABLE_HEAD_REQUESTS)=}'
-        assert type(cls.DISABLE_OPTIONS_REQUESTS) == bool, f'Expected boolean value but encountered {type(cls.DISABLE_OPTIONS_REQUESTS)=}'
-        assert type(cls.RESPONSE_ENCODING) == str, f'Expected string value but encountered {type(cls.RESPONSE_ENCODING)=}'
-        assert type(cls.PARSE_TEMPLATE) == bool, f'Expected boolean value but encountered {type(cls.PARSE_TEMPLATE)=}'
-        assert type(cls.TEMPLATE_ENCODING) == str, f'Expected string value but encountered {type(cls.TEMPLATE_ENCODING)=}'
+        assert type(cls.DISABLE_HEAD_REQUESTS) == bool, f'Expected boolean value but encountered {type(cls.DISABLE_HEAD_REQUESTS)}'
+        assert type(cls.DISABLE_OPTIONS_REQUESTS) == bool, f'Expected boolean value but encountered {type(cls.DISABLE_OPTIONS_REQUESTS)}'
+        assert type(cls.RESPONSE_ENCODING) == str, f'Expected string value but encountered {type(cls.RESPONSE_ENCODING)}'
+        assert type(cls.PARSE_TEMPLATE) == bool, f'Expected boolean value but encountered {type(cls.PARSE_TEMPLATE)}'
+        assert type(cls.TEMPLATE_ENCODING) == str, f'Expected string value but encountered {type(cls.TEMPLATE_ENCODING)}'
 
         for method in cls.METHODS:
             if method not in WebPathMap.PATHS:
