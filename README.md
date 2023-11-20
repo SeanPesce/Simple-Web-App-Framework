@@ -28,7 +28,7 @@ This code was not developed with security in mind, and likely contains vulnerabi
 
 ## License  
 
-None yet.  
+[GNU General Public License v2.0](LICENSE)  
 
 ---------------------------------------------
 
